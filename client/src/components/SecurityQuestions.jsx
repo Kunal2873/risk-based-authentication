@@ -1,18 +1,78 @@
 import { useState } from "react";
 
-export default function SecurityQuestionStep({ onSubmit }) {
-  const [value, setValue] = useState("");
+const styles = {
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px"
+  },
+  title: {
+    margin: 0,
+    fontSize: "18px",
+    color: "#111827"
+  },
+  prompt: {
+    margin: 0,
+    color: "#4b5563"
+  },
+  input: {
+    padding: "10px 12px",
+    border: "1px solid #cbd5e1",
+    borderRadius: "8px",
+    fontSize: "14px"
+  },
+  button: {
+    alignSelf: "flex-start",
+    padding: "10px 16px",
+    border: "none",
+    borderRadius: "8px",
+    backgroundColor: "#2563eb",
+    color: "#ffffff",
+    fontWeight: 600,
+    cursor: "pointer"
+  }
+};
+
+export default function SecurityQuestionStep({ onSubmit, loading = false }) {
+  const [form, setForm] = useState({
+    date_of_birth: "",
+    mothers_maiden_name: "",
+    first_school: ""
+  });
+
+  const updateField = (field) => (e) => {
+    setForm((current) => ({
+      ...current,
+      [field]: e.target.value
+    }));
+  };
 
   return (
-    <div>
-      <h4>Security Question</h4>
-      <p>What is your first school name?</p>
+    <div style={styles.wrapper}>
+      <h4 style={styles.title}>Security Questions</h4>
+      <p style={styles.prompt}>Answer all questions below to continue.</p>
 
       <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={form.date_of_birth}
+        onChange={updateField("date_of_birth")}
+        style={styles.input}
+        placeholder="DD/MM/YYYY"
       />
-      <button onClick={() => onSubmit(value)}>Verify</button>
+      <input
+        value={form.mothers_maiden_name}
+        onChange={updateField("mothers_maiden_name")}
+        style={styles.input}
+        placeholder="Mother's maiden name"
+      />
+      <input
+        value={form.first_school}
+        onChange={updateField("first_school")}
+        style={styles.input}
+        placeholder="First school name"
+      />
+      <button type="button" onClick={() => onSubmit(form)} disabled={loading} style={styles.button}>
+        {loading ? "Verifying..." : "Verify"}
+      </button>
     </div>
   );
 }

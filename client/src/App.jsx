@@ -1,8 +1,9 @@
-import {TransactionPage} from './pages/TransactionPage'
+import PaymentPage from "./pages/PaymentPage";
+
 function App() {
   return (
     <div>
-      <TransactionPage />
+      <PaymentPage />
     </div>
   );
 }

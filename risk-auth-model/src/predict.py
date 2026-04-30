@@ -20,9 +20,9 @@ FEATURE_COLUMNS = [
 
 RISK_LABELS = {0: "low", 1: "medium", 2: "high"}
 REQUIRED_AUTH = {
-    "low": ["password", "totp"],
-    "medium": ["password", "totp", "voice_otp"],
-    "high": ["password", "totp", "voice_otp", "relative_approval"],
+    "low": ["otp"],
+    "medium": ["otp", "questionnaire"],
+    "high": ["otp", "questionnaire", "relative_email_otp"],
 }
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "risk_model.pkl"

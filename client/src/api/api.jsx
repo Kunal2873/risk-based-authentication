@@ -6,6 +6,10 @@ export const startTransaction = async (data) => {
   return axios.post(`${BASE_URL}/transaction`, data);
 };
 
+export const saveTransaction = async (data) => {
+  return axios.post(`${BASE_URL}/transaction/save`, data);
+};
+
 export const verifyStep = async (data) => {
   return axios.post(`${BASE_URL}/auth/verify`, data);
 };

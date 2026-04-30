@@ -29,19 +29,20 @@ const styles = {
   }
 };
 
-export default function OtpStep({ onSubmit, loading = false, label = "Enter OTP" }) {
-  const [otp, setOtp] = useState("");
+export default function PasswordStep({ onSubmit, loading = false }) {
+  const [password, setPassword] = useState("");
 
   return (
     <div style={styles.wrapper}>
-      <h4 style={styles.title}>{label}</h4>
+      <h4 style={styles.title}>Password Verification</h4>
       <input
-        value={otp}
-        onChange={(e) => setOtp(e.target.value)}
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         style={styles.input}
-        placeholder="Enter code"
+        placeholder="Enter password"
       />
-      <button type="button" onClick={() => onSubmit(otp)} disabled={loading} style={styles.button}>
+      <button type="button" onClick={() => onSubmit(password)} disabled={loading} style={styles.button}>
         {loading ? "Verifying..." : "Verify"}
       </button>
     </div>
