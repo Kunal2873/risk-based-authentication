@@ -6,9 +6,10 @@ import SecurityQuestionStep from "./SecurityQuestions";
 const styles = {
   card: {
     backgroundColor: "#ffffff",
-    border: "1px solid #d1d5db",
-    borderRadius: "12px",
-    padding: "24px"
+    border: "1px solid #e0e0e0",
+    borderRadius: "16px",
+    padding: "28px",
+    boxShadow: "0 2px 16px rgba(0,0,0,0.08)"
   },
   progressMeta: {
     display: "flex",
@@ -20,23 +21,23 @@ const styles = {
   progressTrack: {
     width: "100%",
     height: "10px",
-    backgroundColor: "#e5e7eb",
+    backgroundColor: "#e0e0e0",
     borderRadius: "999px",
     overflow: "hidden",
     marginBottom: "20px"
   },
   progressFill: {
     height: "100%",
-    backgroundColor: "#2563eb"
+    backgroundColor: "#00b074"
   },
   title: {
     margin: "0 0 8px",
     fontSize: "22px",
-    color: "#111827"
+    color: "#1a1a2e"
   },
   caption: {
     margin: "0 0 20px",
-    color: "#4b5563"
+    color: "#888888"
   },
   message: {
     marginBottom: "16px",
@@ -45,22 +46,22 @@ const styles = {
     fontSize: "14px"
   },
   error: {
-    backgroundColor: "#fef2f2",
-    color: "#b91c1c",
-    border: "1px solid #fecaca"
+    backgroundColor: "#fff0f0",
+    color: "#cc0000",
+    border: "1px solid #ffcccc"
   },
   successCard: {
-    backgroundColor: "#f0fdf4",
-    border: "1px solid #bbf7d0",
-    borderRadius: "12px",
-    padding: "20px"
+    backgroundColor: "#f0fff8",
+    border: "1px solid #00b074",
+    borderRadius: "16px",
+    padding: "24px"
   },
   resetButton: {
     marginTop: "16px",
     padding: "12px 18px",
     border: "none",
     borderRadius: "8px",
-    backgroundColor: "#2563eb",
+    backgroundColor: "#00b074",
     color: "#ffffff",
     fontWeight: 600,
     cursor: "pointer"

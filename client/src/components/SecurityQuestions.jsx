@@ -9,24 +9,26 @@ const styles = {
   title: {
     margin: 0,
     fontSize: "18px",
-    color: "#111827"
+    color: "#1a1a2e"
   },
   prompt: {
     margin: 0,
-    color: "#4b5563"
+    color: "#888888"
   },
   input: {
     padding: "10px 12px",
-    border: "1px solid #cbd5e1",
+    border: "1.5px solid #e0e0e0",
     borderRadius: "8px",
-    fontSize: "14px"
+    fontSize: "14px",
+    color: "#1a1a2e",
+    outline: "none"
   },
   button: {
     alignSelf: "flex-start",
-    padding: "10px 16px",
+    padding: "10px 20px",
     border: "none",
     borderRadius: "8px",
-    backgroundColor: "#2563eb",
+    backgroundColor: "#00b074",
     color: "#ffffff",
     fontWeight: 600,
     cursor: "pointer"

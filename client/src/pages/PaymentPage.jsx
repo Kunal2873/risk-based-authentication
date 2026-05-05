@@ -2,47 +2,84 @@ import { useState } from "react";
 import { saveTransaction, startTransaction } from "../api/api";
 import AuthFlow from "../components/AutoFlow";
 
+const validUsers = [
+  { username: "kunal", password: "kunal@99" },
+  { username: "nakul", password: "nakul@13" },
+  { username: "prakhar", password: "prakhar@30" },
+  { username: "kaushal", password: "kaushal@92" },
+  { username: "mohak", password: "mohak@07" }
+];
+
 const styles = {
   page: {
     minHeight: "100vh",
-    backgroundColor: "#f8fafc",
+    background: "#f0f2f5",
     padding: "40px 20px",
     fontFamily: "Arial, sans-serif",
-    color: "#0f172a"
+    color: "#1a1a2e",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
   shell: {
+    width: "100%",
     maxWidth: "760px",
     margin: "0 auto"
   },
   brand: {
     marginBottom: "20px"
   },
+  brandHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px"
+  },
   brandName: {
     margin: 0,
     fontSize: "34px",
     fontWeight: 700,
-    color: "#0f172a"
+    color: "#00b074"
   },
   brandTag: {
     margin: "6px 0 0",
-    color: "#475569",
+    color: "#888888",
     fontSize: "15px"
   },
+  badgeRow: {
+    display: "flex",
+    gap: "20px",
+    marginTop: "12px",
+    fontSize: "12px",
+    color: "#888888",
+    flexWrap: "wrap"
+  },
+  badgeItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px"
+  },
   card: {
-    backgroundColor: "#ffffff",
-    border: "1px solid #dbe3ee",
+    background: "#ffffff",
     borderRadius: "16px",
     padding: "28px",
-    boxShadow: "0 10px 30px rgba(15, 23, 42, 0.06)"
+    boxShadow: "0 2px 16px rgba(0,0,0,0.08)",
+    border: "1px solid #e0e0e0"
   },
   sectionTitle: {
     margin: "0 0 8px",
-    fontSize: "24px"
+    fontSize: "24px",
+    color: "#1a1a2e"
   },
   sectionText: {
     margin: "0 0 24px",
-    color: "#475569",
+    color: "#888888",
     lineHeight: 1.5
+  },
+  paymentIndicators: {
+    display: "flex",
+    gap: "12px",
+    marginBottom: "20px",
+    opacity: 0.5
   },
   formGrid: {
     display: "grid",
@@ -60,23 +97,42 @@ const styles = {
   label: {
     fontSize: "14px",
     fontWeight: 600,
-    color: "#334155"
+    color: "#1a1a2e"
   },
   input: {
     padding: "12px 14px",
-    border: "1px solid #cbd5e1",
-    borderRadius: "10px",
-    fontSize: "14px"
+    border: "1.5px solid #e0e0e0",
+    borderRadius: "8px",
+    fontSize: "14px",
+    backgroundColor: "#ffffff",
+    color: "#1a1a2e",
+    outline: "none"
+  },
+  inputWithAdornment: {
+    paddingLeft: "28px"
+  },
+  inputWrap: {
+    position: "relative"
+  },
+  inputAdornment: {
+    position: "absolute",
+    left: "14px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#888888",
+    fontSize: "14px",
+    fontWeight: 600
   },
   button: {
     marginTop: "24px",
     padding: "13px 18px",
     border: "none",
     borderRadius: "10px",
-    backgroundColor: "#0f172a",
+    background: "#00b074",
     color: "#ffffff",
     fontWeight: 700,
-    cursor: "pointer"
+    cursor: "pointer",
+    width: "100%"
   },
   message: {
     marginTop: "18px",
@@ -85,13 +141,13 @@ const styles = {
     fontSize: "14px"
   },
   error: {
-    backgroundColor: "#fef2f2",
-    border: "1px solid #fecaca",
-    color: "#b91c1c"
+    backgroundColor: "#fff0f0",
+    border: "1px solid #ffcccc",
+    color: "#cc0000"
   },
   authPage: {
     minHeight: "100vh",
-    backgroundColor: "#f8fafc",
+    background: "#f0f2f5",
     padding: "40px 20px",
     display: "flex",
     alignItems: "center",
@@ -102,19 +158,20 @@ const styles = {
     maxWidth: "760px"
   },
   successCard: {
-    backgroundColor: "#f0fdf4",
-    border: "1px solid #bbf7d0",
+    background: "#ffffff",
+    border: "1px solid #e0e0e0",
     borderRadius: "16px",
-    padding: "28px"
+    padding: "28px",
+    boxShadow: "0 2px 16px rgba(0,0,0,0.08)"
   },
   successTitle: {
     margin: "0 0 10px",
     fontSize: "26px",
-    color: "#166534"
+    color: "#00b074"
   },
   successText: {
     margin: "0 0 20px",
-    color: "#166534"
+    color: "#888888"
   },
   details: {
     display: "grid",
@@ -126,14 +183,14 @@ const styles = {
     justifyContent: "space-between",
     gap: "12px",
     paddingBottom: "10px",
-    borderBottom: "1px solid #dcfce7"
+    borderBottom: "1px solid #e0e0e0"
   },
   detailLabel: {
-    color: "#166534",
+    color: "#888888",
     fontWeight: 600
   },
   detailValue: {
-    color: "#14532d",
+    color: "#1a1a2e",
     textAlign: "right"
   },
   secondaryButton: {
@@ -141,10 +198,11 @@ const styles = {
     padding: "13px 18px",
     border: "none",
     borderRadius: "10px",
-    backgroundColor: "#166534",
+    background: "#00b074",
     color: "#ffffff",
     fontWeight: 700,
-    cursor: "pointer"
+    cursor: "pointer",
+    width: "100%"
   }
 };
 
@@ -202,7 +260,12 @@ const getCurrentLocation = () =>
   });
 
 export default function PaymentPage() {
-  const [page, setPage] = useState("form");
+  const [page, setPage] = useState("login");
+  const [loginForm, setLoginForm] = useState({
+    username: "",
+    password: ""
+  });
+  const [loggedInUsername, setLoggedInUsername] = useState("");
   const [paymentForm, setPaymentForm] = useState({
     userId: "USER_ID_HERE",
     recipient: "",
@@ -213,6 +276,37 @@ export default function PaymentPage() {
   const [paymentReceipt, setPaymentReceipt] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleLoginChange = (event) => {
+    const { name, value } = event.target;
+    setLoginForm((current) => ({
+      ...current,
+      [name]: value
+    }));
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    const matchedUser = validUsers.find(
+      (user) =>
+        user.username === loginForm.username &&
+        user.password === loginForm.password
+    );
+
+    if (!matchedUser) {
+      setError("Invalid username or password.");
+      return;
+    }
+
+    setLoggedInUsername(matchedUser.username);
+    setPaymentForm((current) => ({
+      ...current,
+      userId: matchedUser.username
+    }));
+    setError("");
+    setPage("form");
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -302,6 +396,73 @@ export default function PaymentPage() {
     setPage("success");
   };
 
+  if (page === "login") {
+    return (
+      <div style={styles.page}>
+        <div style={styles.shell}>
+          <div style={styles.brand}>
+            <div style={styles.brandHeader}>
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z" fill="#00b074" opacity="0.3"/><path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z" stroke="#00b074" strokeWidth="1.5"/><path d="M9 12l2 2 4-4" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <h1 style={styles.brandName}>SecurePay</h1>
+            </div>
+            <p style={styles.brandTag}>Protected payments with adaptive authentication</p>
+            <div style={styles.badgeRow}>
+              <div style={styles.badgeItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><rect x="5" y="11" width="14" height="10" rx="2" stroke="#00b074" strokeWidth="1.5"/></svg>
+                <span>256-bit Encrypted</span>
+              </div>
+              <div style={styles.badgeItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L5 6v5c0 4.08 2.91 7.9 7 8.82 4.09-.92 7-4.74 7-8.82V6l-7-3z" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span>Fraud Protected</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={styles.card}>
+            <h2 style={styles.sectionTitle}>Login</h2>
+            <p style={styles.sectionText}>Sign in to continue to your secure payment flow.</p>
+
+            <form onSubmit={handleLogin}>
+              <div style={styles.formGrid}>
+                <div style={{ ...styles.field, ...styles.fullWidth }}>
+                  <label htmlFor="username" style={styles.label}>Username</label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={loginForm.username}
+                    onChange={handleLoginChange}
+                    style={styles.input}
+                    required
+                  />
+                </div>
+
+                <div style={{ ...styles.field, ...styles.fullWidth }}>
+                  <label htmlFor="password" style={styles.label}>Password</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={loginForm.password}
+                    onChange={handleLoginChange}
+                    style={styles.input}
+                    required
+                  />
+                </div>
+              </div>
+
+              <button type="submit" style={styles.button}>
+                Login
+              </button>
+            </form>
+
+            {error && <div style={{ ...styles.message, ...styles.error }}>{error}</div>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (page === "auth") {
     return (
       <div style={styles.authPage}>
@@ -364,20 +525,39 @@ export default function PaymentPage() {
 
   return (
     <div style={styles.page}>
-      <div style={styles.shell}>
-        <div style={styles.brand}>
-          <h1 style={styles.brandName}>SecurePay</h1>
-          <p style={styles.brandTag}>Protected payments with adaptive authentication</p>
-        </div>
+        <div style={styles.shell}>
+          <div style={styles.brand}>
+            <div style={styles.brandHeader}>
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z" fill="#00b074" opacity="0.3"/><path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z" stroke="#00b074" strokeWidth="1.5"/><path d="M9 12l2 2 4-4" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <h1 style={styles.brandName}>SecurePay</h1>
+            </div>
+            <p style={styles.brandTag}>Protected payments with adaptive authentication</p>
+            <div style={styles.badgeRow}>
+              <div style={styles.badgeItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><rect x="5" y="11" width="14" height="10" rx="2" stroke="#00b074" strokeWidth="1.5"/></svg>
+                <span>256-bit Encrypted</span>
+              </div>
+              <div style={styles.badgeItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L5 6v5c0 4.08 2.91 7.9 7 8.82 4.09-.92 7-4.74 7-8.82V6l-7-3z" stroke="#00b074" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span>Fraud Protected</span>
+              </div>
+            </div>
+          </div>
 
-        <div style={styles.card}>
-          <h2 style={styles.sectionTitle}>Payment Gateway</h2>
-          <p style={styles.sectionText}>
-            Enter payment details below. SecurePay will run a risk analysis and ask for the required authentication steps before completing the transfer.
-          </p>
+          <div style={styles.card}>
+            <h2 style={styles.sectionTitle}>Payment Gateway</h2>
+            <p style={styles.sectionText}>
+              Enter payment details below. SecurePay will run a risk analysis and ask for the required authentication steps before completing the transfer.
+            </p>
 
-          <form onSubmit={handleSubmit}>
-            <div style={styles.formGrid}>
+            <div style={styles.paymentIndicators}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="6" width="18" height="12" rx="2" stroke="#94a3b8" strokeWidth="1.5"/><path d="M3 10h18" stroke="#94a3b8" strokeWidth="1.5"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 8.5a4.5 4.5 0 0 1 0 7" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round"/><path d="M17 6a8 8 0 0 1 0 12" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round"/><path d="M11 11.5a1.5 1.5 0 0 1 0 1" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 20h16" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round"/><path d="M6 20V9l6-4 6 4v11" stroke="#94a3b8" strokeWidth="1.5" strokeLinejoin="round"/><path d="M10 13h4" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              <div style={styles.formGrid}>
               <div style={{ ...styles.field, ...styles.fullWidth }}>
                 <label htmlFor="recipient" style={styles.label}>Recipient Name</label>
                 <input
@@ -405,30 +585,21 @@ export default function PaymentPage() {
               </div>
 
               <div style={styles.field}>
-                <label htmlFor="amount" style={styles.label}>Amount</label>
-                <input
-                  id="amount"
-                  name="amount"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={paymentForm.amount}
-                  onChange={handleChange}
-                  style={styles.input}
-                  required
-                />
-              </div>
-
-              <div style={{ ...styles.field, ...styles.fullWidth }}>
-                <label htmlFor="userId" style={styles.label}>User ID</label>
-                <input
-                  id="userId"
-                  name="userId"
-                  type="text"
-                  value={paymentForm.userId}
-                  onChange={handleChange}
-                  style={styles.input}
-                />
+                <label htmlFor="amount" style={styles.label}>Amount (USD)</label>
+                <div style={styles.inputWrap}>
+                  <span style={styles.inputAdornment}>$</span>
+                  <input
+                    id="amount"
+                    name="amount"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={paymentForm.amount}
+                    onChange={handleChange}
+                    style={{ ...styles.input, ...styles.inputWithAdornment }}
+                    required
+                  />
+                </div>
               </div>
             </div>
 
