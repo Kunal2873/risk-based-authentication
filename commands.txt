@@ -1,0 +1,38 @@
+SecurePay - Quick Reference
+===========================
+
+RUN COMMANDS
+------------
+
+Terminal 1 - ML API:
+cd C:\project\Final_year_Project\risk-auth-model
+venv\Scripts\activate
+python api.py
+
+Terminal 2 - Backend:
+cd C:\project\Final_year_Project\backend
+node index.js
+
+Terminal 3 - Frontend:
+cd C:\project\Final_year_Project\client
+npm run dev
+
+App runs at: http://localhost:5173
+
+
+LOGIN CREDENTIALS
+-----------------
+
+kunal / kunal@99
+nakul / nakul@13
+prakhar / prakhar@30
+kaushal / kaushal@92
+mohak / mohak@07
+
+
+RISK LEVELS
+-----------
+
+Low (~$50)    -> OTP only
+Medium (~$500) -> OTP + Security Questions
+High (~$2000)  -> OTP + Security Questions + Relative Email OTP
